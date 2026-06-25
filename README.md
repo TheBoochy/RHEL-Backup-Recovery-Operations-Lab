@@ -47,7 +47,7 @@ The goals of this lab are to:
 | ------- | ------------------------------------------ | -------- |
 | Part 1  | Repository setup and planning              | Complete |
 | Part 2  | RHEL baseline and backup target review     | Complete |
-| Part 3  | Create test data and backup source folders | Planned  |
+| Part 3  | Create test data and backup source folders | Complete |
 | Part 4  | Manual tar backup                          | Planned  |
 | Part 5  | Compressed backup archive                  | Planned  |
 | Part 6  | Backup verification and checksums          | Planned  |
@@ -76,7 +76,9 @@ RHEL-Backup-Recovery-Operations-Lab/
 │   ├── screenshot-02a-rhel-baseline-system.png
 │   ├── screenshot-02b-rhel-baseline-resources-and-security.png
 │   ├── screenshot-02c-rhel-backup-tool-availability.png
-│   └── screenshot-02d-rhel-backup-target-review.png
+│   ├── screenshot-02d-rhel-backup-target-review.png
+│   ├── screenshot-03a-rhel-backup-lab-folder-structure.png
+│   └── screenshot-03b-rhel-backup-test-file-content.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -97,9 +99,11 @@ Backup tool availability was reviewed. The system has `tar`, `gzip` and `sha256s
 
 Scheduling options were reviewed. No user crontab was found, but systemd timers were available and listed.
 
-Backup target locations were reviewed. No existing `/home/vulkan/backup-lab` folder was found, which means the lab backup folder can be created cleanly in the next part. The `/tmp` and `/var/tmp` directories were also reviewed.
+Backup target locations were reviewed. No existing `/home/vulkan/backup-lab` folder was found before the lab structure was created. The `/tmp` and `/var/tmp` directories were also reviewed.
 
-The next step is to create safe test data and backup source folders under `/home/vulkan/backup-lab`.
+Safe backup test data was created under `/home/vulkan/backup-lab/source`. The test data includes lab configuration files, lab documents and a backup scope report. Supporting folders were also created for backups, restore testing and result output.
+
+The next step is to create a manual tar backup from the test source folder.
 
 ---
 
@@ -150,6 +154,8 @@ Current screenshot evidence:
 | `screenshot-02b-rhel-baseline-resources-and-security.png` | Disk, memory, SELinux and firewalld review |
 | `screenshot-02c-rhel-backup-tool-availability.png`        | Backup tool and scheduling availability    |
 | `screenshot-02d-rhel-backup-target-review.png`            | Backup target and temporary folder review  |
+| `screenshot-03a-rhel-backup-lab-folder-structure.png`     | Backup lab folder structure verification   |
+| `screenshot-03b-rhel-backup-test-file-content.png`        | Backup test file content verification      |
 
 Command results and verification output may be stored in:
 
@@ -224,7 +230,7 @@ Notes:
 
 The missing `rsync` command was documented as a limitation. The lab can continue using `tar`, `gzip` and `sha256sum`, which are available and sufficient for basic archive backup, compression and integrity verification.
 
-The `backup-lab` folder did not already exist, which provides a clean starting point for creating test backup data in Part 3.
+The `backup-lab` folder did not already exist, which provided a clean starting point for creating test backup data in Part 3.
 
 Screenshots:
 
@@ -233,6 +239,108 @@ screenshots/screenshot-02a-rhel-baseline-system.png
 screenshots/screenshot-02b-rhel-baseline-resources-and-security.png
 screenshots/screenshot-02c-rhel-backup-tool-availability.png
 screenshots/screenshot-02d-rhel-backup-target-review.png
+```
+
+---
+
+## Part 3 — Create test data and backup source folders
+
+Status: Complete
+
+This part created a safe backup lab folder structure and test data for future backup and restore operations.
+
+The backup lab folder was created under `/home/vulkan/backup-lab`. Test source files were created under the `source` folder, and separate folders were prepared for backup archives, restore testing and result output.
+
+Commands used:
+
+```bash
+mkdir -p ~/backup-lab/source/config
+mkdir -p ~/backup-lab/source/documents
+mkdir -p ~/backup-lab/source/reports
+mkdir -p ~/backup-lab/backups
+mkdir -p ~/backup-lab/restore-test
+mkdir -p ~/backup-lab/results
+
+cat > ~/backup-lab/source/config/app.conf <<'EOF'
+# Lab application configuration
+# This is safe test data for the RHEL Backup and Recovery Operations Lab.
+
+app_name=backup-lab-demo
+environment=lab
+backup_required=true
+owner=Vulkan
+EOF
+
+cat > ~/backup-lab/source/config/service.conf <<'EOF'
+# Lab service configuration
+# No real secrets are stored in this file.
+
+service_name=example-service
+service_port=8080
+service_enabled=true
+EOF
+
+cat > ~/backup-lab/source/documents/operations-notes.txt <<'EOF'
+RHEL Backup and Recovery Operations Lab
+
+This document represents safe operational notes for backup testing.
+
+No real business data, credentials, keys or personal data are included.
+EOF
+
+cat > ~/backup-lab/source/documents/recovery-plan.txt <<'EOF'
+Basic Recovery Plan
+
+1. Identify the latest valid backup.
+2. Verify the backup checksum.
+3. Extract the archive into a restore-test folder.
+4. Compare restored files with expected contents.
+5. Document recovery result.
+EOF
+
+cat > ~/backup-lab/source/reports/backup-scope.txt <<'EOF'
+Backup Scope
+
+Included:
+- Lab configuration files
+- Lab documents
+- Lab reports
+
+Excluded:
+- Real credentials
+- SSH keys
+- Personal data
+- Production files
+EOF
+
+tree ~/backup-lab 2>/dev/null || find ~/backup-lab -type f -o -type d
+
+ls -lR ~/backup-lab
+cat ~/backup-lab/source/config/app.conf
+cat ~/backup-lab/source/documents/recovery-plan.txt
+```
+
+Results:
+
+* Created `/home/vulkan/backup-lab`.
+* Created source folders for configuration files, documents and reports.
+* Created backup support folders for backup archives, restore testing and results.
+* Created safe lab test files.
+* Verified the folder structure.
+* Verified file permissions and file contents.
+* Confirmed that no real credentials, SSH keys, production files or personal data were used.
+
+Notes:
+
+The `tree` command was not required because the fallback `find` command successfully listed the backup lab structure.
+
+All files created in this part are safe test data for the lab.
+
+Screenshots:
+
+```text
+screenshots/screenshot-03a-rhel-backup-lab-folder-structure.png
+screenshots/screenshot-03b-rhel-backup-test-file-content.png
 ```
 
 ---

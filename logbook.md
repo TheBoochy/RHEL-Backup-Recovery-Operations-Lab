@@ -10,7 +10,6 @@ Start the RHEL Backup and Recovery Operations Lab by creating the local project 
 
 * Created the local project folder.
 * Created the main documentation folders:
-
   * backups
   * docs
   * screenshots
@@ -223,3 +222,144 @@ Screenshots:
 ![screenshot-02c-rhel-backup-tool-availability.png](screenshots/screenshot-02c-rhel-backup-tool-availability.png)
 
 ![screenshot-02d-rhel-backup-target-review.png](screenshots/screenshot-02d-rhel-backup-target-review.png)
+
+---
+
+## 2026-06-25 — Part 3: Create test data and backup source folders
+
+### Goal
+
+Create a safe backup lab folder structure and test data for future backup and restore operations.
+
+The test files are used only for lab purposes and do not contain real secrets, credentials, personal data or production files.
+
+### Work completed
+
+* Created `/home/vulkan/backup-lab`.
+* Created a `source` folder for backup source data.
+* Created a `source/config` folder for lab configuration files.
+* Created a `source/documents` folder for lab document files.
+* Created a `source/reports` folder for lab report files.
+* Created a `backups` folder for future backup archives.
+* Created a `restore-test` folder for future restore testing.
+* Created a `results` folder for future checksum and verification output.
+* Created safe test configuration files.
+* Created safe test document files.
+* Created a safe backup scope report.
+* Verified the folder structure with `find`.
+* Verified file permissions and file contents.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item                  | Result                            |
+| --------------------- | --------------------------------- |
+| Main lab folder        | `/home/vulkan/backup-lab`         |
+| Backup source folder   | `/home/vulkan/backup-lab/source`  |
+| Config test files      | Created                           |
+| Document test files    | Created                           |
+| Report test files      | Created                           |
+| Backup archive folder  | Created                           |
+| Restore test folder    | Created                           |
+| Results folder         | Created                           |
+| Real secrets included  | No                                |
+| Personal data included | No                                |
+| Production files used  | No                                |
+
+### Commands used
+
+```bash
+mkdir -p ~/backup-lab/source/config
+mkdir -p ~/backup-lab/source/documents
+mkdir -p ~/backup-lab/source/reports
+mkdir -p ~/backup-lab/backups
+mkdir -p ~/backup-lab/restore-test
+mkdir -p ~/backup-lab/results
+
+cat > ~/backup-lab/source/config/app.conf <<'EOF'
+# Lab application configuration
+# This is safe test data for the RHEL Backup and Recovery Operations Lab.
+
+app_name=backup-lab-demo
+environment=lab
+backup_required=true
+owner=Vulkan
+EOF
+
+cat > ~/backup-lab/source/config/service.conf <<'EOF'
+# Lab service configuration
+# No real secrets are stored in this file.
+
+service_name=example-service
+service_port=8080
+service_enabled=true
+EOF
+
+cat > ~/backup-lab/source/documents/operations-notes.txt <<'EOF'
+RHEL Backup and Recovery Operations Lab
+
+This document represents safe operational notes for backup testing.
+
+No real business data, credentials, keys or personal data are included.
+EOF
+
+cat > ~/backup-lab/source/documents/recovery-plan.txt <<'EOF'
+Basic Recovery Plan
+
+1. Identify the latest valid backup.
+2. Verify the backup checksum.
+3. Extract the archive into a restore-test folder.
+4. Compare restored files with expected contents.
+5. Document recovery result.
+EOF
+
+cat > ~/backup-lab/source/reports/backup-scope.txt <<'EOF'
+Backup Scope
+
+Included:
+- Lab configuration files
+- Lab documents
+- Lab reports
+
+Excluded:
+- Real credentials
+- SSH keys
+- Personal data
+- Production files
+EOF
+
+tree ~/backup-lab 2>/dev/null || find ~/backup-lab -type f -o -type d
+
+ls -lR ~/backup-lab
+cat ~/backup-lab/source/config/app.conf
+cat ~/backup-lab/source/documents/recovery-plan.txt
+```
+
+### Command purpose
+
+| Command                                               | Purpose                                                        |
+| ----------------------------------------------------- | -------------------------------------------------------------- |
+| `mkdir -p`                                            | Creates folders and parent folders if needed.                  |
+| `cat > file <<'EOF'`                                  | Creates a text file using heredoc input.                       |
+| `tree ~/backup-lab 2>/dev/null \|\| find ...`         | Shows the folder structure, using `find` if `tree` is missing. |
+| `ls -lR ~/backup-lab`                                 | Lists files and folders recursively with permissions.          |
+| `cat ~/backup-lab/source/config/app.conf`             | Shows the test application configuration file content.         |
+| `cat ~/backup-lab/source/documents/recovery-plan.txt` | Shows the test recovery plan file content.                     |
+
+### Notes
+
+The backup lab structure was created under the `vulkan` user home directory.
+
+The source folder contains safe test data only. The files are intentionally fake and contain no real credentials, SSH keys, personal data or production information.
+
+The folder structure includes separate areas for backup source data, backup archives, restore testing and result output. This makes later backup and recovery steps easier to document clearly.
+
+The `tree` command was not required because the fallback `find` command successfully listed the folder structure.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-03a-rhel-backup-lab-folder-structure.png](screenshots/screenshot-03a-rhel-backup-lab-folder-structure.png)
+
+![screenshot-03b-rhel-backup-test-file-content.png](screenshots/screenshot-03b-rhel-backup-test-file-content.png)
