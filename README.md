@@ -51,7 +51,7 @@ The goals of this lab are to:
 | Part 4  | Manual tar backup                          | Complete |
 | Part 5  | Compressed backup archive                  | Complete |
 | Part 6  | Backup verification and checksums          | Complete |
-| Part 7  | Restore test from backup                   | Planned  |
+| Part 7  | Restore test from backup                   | Complete |
 | Part 8  | Backup script creation                     | Planned  |
 | Part 9  | Scheduled backup review                    | Planned  |
 | Part 10 | Backup logs and result documentation       | Planned  |
@@ -83,7 +83,9 @@ RHEL-Backup-Recovery-Operations-Lab/
 │   ├── screenshot-04b-rhel-manual-tar-backup-contents.png
 │   ├── screenshot-05a-rhel-compressed-backup-created.png
 │   ├── screenshot-05b-rhel-compressed-backup-contents.png
-│   └── screenshot-06a-rhel-backup-checksum-created-and-verified.png
+│   ├── screenshot-06a-rhel-backup-checksum-created-and-verified.png
+│   ├── screenshot-07a-rhel-restore-test-extraction.png
+│   └── screenshot-07b-rhel-restore-test-verification.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -114,7 +116,9 @@ A compressed backup archive was created from `/home/vulkan/backup-lab/source` an
 
 SHA-256 checksums were generated for both backup archives and saved to `/home/vulkan/backup-lab/results/backup-checksums.sha256`. The checksums were verified with `sha256sum -c`, and both backup archives returned `OK`. The verification output was saved to `/home/vulkan/backup-lab/results/backup-checksum-verification.txt`.
 
-The next step is to perform a restore test from backup.
+A restore test was performed from `/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz` into `/home/vulkan/backup-lab/restore-test`. The restored files were compared against the original source folder with `diff -r`, and the comparison returned exit code `0`, confirming that the restored files matched the original test data.
+
+The next step is to create a reusable backup script.
 
 ---
 
@@ -170,6 +174,8 @@ Current screenshot evidence:
 | `screenshot-05a-rhel-compressed-backup-created.png`            | Compressed tar.gz archive creation and verification |
 | `screenshot-05b-rhel-compressed-backup-contents.png`           | Compressed archive content verification             |
 | `screenshot-06a-rhel-backup-checksum-created-and-verified.png` | Backup checksum creation and verification           |
+| `screenshot-07a-rhel-restore-test-extraction.png`              | Restore test extraction and file listing            |
+| `screenshot-07b-rhel-restore-test-verification.png`            | Restore comparison and verification result          |
 
 Command results and verification output may be stored in:
 
@@ -544,6 +550,83 @@ The `OK` result confirms that both backup archive files matched their recorded S
 Screenshot link:
 
 [screenshot-06a-rhel-backup-checksum-created-and-verified.png](screenshots/screenshot-06a-rhel-backup-checksum-created-and-verified.png)
+
+---
+
+## Part 7 — Restore test from backup
+
+Status: Complete
+
+This part restored the compressed backup archive into a separate restore test folder and verified that the restored files matched the original source files.
+
+The compressed backup archive was:
+
+```text
+/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz
+```
+
+The restore destination was:
+
+```text
+/home/vulkan/backup-lab/restore-test
+```
+
+The restored source folder was compared against:
+
+```text
+/home/vulkan/backup-lab/source
+```
+
+Commands used:
+
+```bash
+rm -rf ~/backup-lab/restore-test/*
+mkdir -p ~/backup-lab/restore-test
+ls -la ~/backup-lab/restore-test
+
+cd ~/backup-lab/backups
+sha256sum -c ../results/backup-checksums.sha256
+
+cd ~/backup-lab
+tar -xzvf backups/compressed-source-backup.tar.gz -C restore-test
+
+find ~/backup-lab/restore-test -type f -o -type d
+ls -lR ~/backup-lab/restore-test
+
+diff -r ~/backup-lab/source ~/backup-lab/restore-test/source
+echo "diff exit code: $?"
+
+diff -r ~/backup-lab/source ~/backup-lab/restore-test/source > ~/backup-lab/results/restore-diff-result.txt
+echo "diff exit code: $?" >> ~/backup-lab/results/restore-diff-result.txt
+cat ~/backup-lab/results/restore-diff-result.txt
+
+find ~/backup-lab/restore-test -type f -o -type d > ~/backup-lab/results/restore-file-listing.txt
+cat ~/backup-lab/results/restore-file-listing.txt
+ls -lh ~/backup-lab/results
+```
+
+Results:
+
+* Cleared the restore test folder.
+* Verified the backup checksums before restoring.
+* Extracted the compressed backup archive into the restore test folder.
+* Confirmed that restored files and folders were created.
+* Compared the restored source folder against the original source folder.
+* Confirmed that `diff -r` returned exit code `0`.
+* Saved the restore comparison result to `/home/vulkan/backup-lab/results/restore-diff-result.txt`.
+* Saved the restored file listing to `/home/vulkan/backup-lab/results/restore-file-listing.txt`.
+
+Notes:
+
+The restore test confirmed that the compressed backup archive could be successfully extracted and that the restored files matched the original source files.
+
+The `diff exit code: 0` result is important because it confirms that no differences were found between the original source folder and the restored source folder.
+
+Screenshot links:
+
+[screenshot-07a-rhel-restore-test-extraction.png](screenshots/screenshot-07a-rhel-restore-test-extraction.png)
+
+[screenshot-07b-rhel-restore-test-verification.png](screenshots/screenshot-07b-rhel-restore-test-verification.png)
 
 ---
 

@@ -601,3 +601,187 @@ This step helps prove backup integrity and provides a way to detect future corru
 Screenshots:
 
 ![screenshot-06a-rhel-backup-checksum-created-and-verified.png](screenshots/screenshot-06a-rhel-backup-checksum-created-and-verified.png)
+
+---
+
+---
+
+## 2026-06-29 — Part 6: Backup verification and checksums
+
+### Goal
+
+Generate SHA-256 checksums for the backup archives and verify that the archives match their recorded checksum values.
+
+### Work completed
+
+* Reviewed the backup archive folder.
+* Verified the manual tar archive file type.
+* Verified the compressed tar.gz archive file type.
+* Generated SHA-256 checksums for both backup archives.
+* Saved the checksum hashes to a results file.
+* Verified both backup archives with `sha256sum -c`.
+* Saved the checksum verification output to a results file.
+* Reviewed the results folder.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item                            | Result                                                             |
+| ------------------------------- | ------------------------------------------------------------------ |
+| Manual backup archive           | `/home/vulkan/backup-lab/backups/manual-source-backup.tar`         |
+| Compressed backup archive       | `/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz`  |
+| Checksum file                   | `/home/vulkan/backup-lab/results/backup-checksums.sha256`          |
+| Checksum verification file      | `/home/vulkan/backup-lab/results/backup-checksum-verification.txt` |
+| Manual archive verification     | `OK`                                                               |
+| Compressed archive verification | `OK`                                                               |
+
+### Commands used
+
+```bash
+ls -lh ~/backup-lab/backups
+file ~/backup-lab/backups/manual-source-backup.tar
+file ~/backup-lab/backups/compressed-source-backup.tar.gz
+
+cd ~/backup-lab/backups
+sha256sum manual-source-backup.tar compressed-source-backup.tar.gz > ../results/backup-checksums.sha256
+cat ../results/backup-checksums.sha256
+
+sha256sum -c ../results/backup-checksums.sha256
+
+sha256sum -c ../results/backup-checksums.sha256 > ../results/backup-checksum-verification.txt
+cat ../results/backup-checksum-verification.txt
+
+ls -lh ~/backup-lab/results
+```
+
+### Command purpose
+
+| Command                                                              | Purpose                                                   |
+| -------------------------------------------------------------------- | --------------------------------------------------------- |
+| `ls -lh ~/backup-lab/backups`                                        | Lists backup archives and shows readable file sizes.      |
+| `file ~/backup-lab/backups/manual-source-backup.tar`                 | Checks the file type of the manual tar archive.           |
+| `file ~/backup-lab/backups/compressed-source-backup.tar.gz`          | Checks the file type of the compressed archive.           |
+| `cd ~/backup-lab/backups`                                            | Moves into the backup archive folder.                     |
+| `sha256sum manual-source-backup.tar compressed-source-backup.tar.gz` | Generates SHA-256 checksums for both backup archives.     |
+| `> ../results/backup-checksums.sha256`                               | Saves the checksum output to a results file.              |
+| `cat ../results/backup-checksums.sha256`                             | Displays the saved checksum file.                         |
+| `sha256sum -c ../results/backup-checksums.sha256`                    | Verifies the backup archives against the checksum file.   |
+| `> ../results/backup-checksum-verification.txt`                      | Saves the checksum verification output to a results file. |
+| `cat ../results/backup-checksum-verification.txt`                    | Displays the saved checksum verification result.          |
+| `ls -lh ~/backup-lab/results`                                        | Lists saved result files.                                 |
+
+### Notes
+
+The checksum file records SHA-256 hashes for both backup archives.
+
+The verification command returned `OK` for both backup archives, confirming that the files matched their recorded checksum values.
+
+This step helps prove backup integrity and provides a way to detect future corruption or unexpected file changes.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-06a-rhel-backup-checksum-created-and-verified.png](screenshots/screenshot-06a-rhel-backup-checksum-created-and-verified.png)
+
+---
+
+## 2026-06-29 — Part 7: Restore test from backup
+
+### Goal
+
+Restore the compressed backup archive into a separate restore test folder and verify that the restored files match the original source files.
+
+### Work completed
+
+* Cleared the restore test folder.
+* Verified the backup checksums before restoring.
+* Extracted the compressed backup archive into `/home/vulkan/backup-lab/restore-test`.
+* Verified the restored folder structure.
+* Listed restored files and folders.
+* Compared the restored source folder with the original source folder.
+* Confirmed that the restore comparison returned exit code `0`.
+* Saved the restore comparison result to a results file.
+* Saved the restored file listing to a results file.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item                       | Result                                                            |
+| -------------------------- | ----------------------------------------------------------------- |
+| Backup archive restored    | `/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz` |
+| Restore destination        | `/home/vulkan/backup-lab/restore-test`                            |
+| Original source folder     | `/home/vulkan/backup-lab/source`                                  |
+| Restored source folder     | `/home/vulkan/backup-lab/restore-test/source`                     |
+| Checksum verification      | `OK`                                                              |
+| Restore comparison command | `diff -r`                                                         |
+| Restore comparison result  | `diff exit code: 0`                                               |
+| Restore diff result file   | `/home/vulkan/backup-lab/results/restore-diff-result.txt`         |
+| Restore file listing       | `/home/vulkan/backup-lab/results/restore-file-listing.txt`        |
+
+### Commands used
+
+```bash
+rm -rf ~/backup-lab/restore-test/*
+mkdir -p ~/backup-lab/restore-test
+ls -la ~/backup-lab/restore-test
+
+cd ~/backup-lab/backups
+sha256sum -c ../results/backup-checksums.sha256
+
+cd ~/backup-lab
+tar -xzvf backups/compressed-source-backup.tar.gz -C restore-test
+
+find ~/backup-lab/restore-test -type f -o -type d
+ls -lR ~/backup-lab/restore-test
+
+diff -r ~/backup-lab/source ~/backup-lab/restore-test/source
+echo "diff exit code: $?"
+
+diff -r ~/backup-lab/source ~/backup-lab/restore-test/source > ~/backup-lab/results/restore-diff-result.txt
+echo "diff exit code: $?" >> ~/backup-lab/results/restore-diff-result.txt
+cat ~/backup-lab/results/restore-diff-result.txt
+
+find ~/backup-lab/restore-test -type f -o -type d > ~/backup-lab/results/restore-file-listing.txt
+cat ~/backup-lab/results/restore-file-listing.txt
+ls -lh ~/backup-lab/results
+```
+
+### Command purpose
+
+| Command                                                                            | Purpose                                                       |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `rm -rf ~/backup-lab/restore-test/*`                                               | Clears old restore test contents.                             |
+| `mkdir -p ~/backup-lab/restore-test`                                               | Ensures the restore test folder exists.                       |
+| `ls -la ~/backup-lab/restore-test`                                                 | Shows the restore test folder before extraction.              |
+| `cd ~/backup-lab/backups`                                                          | Moves into the backup archive folder.                         |
+| `sha256sum -c ../results/backup-checksums.sha256`                                  | Verifies backup archives before restore testing.              |
+| `cd ~/backup-lab`                                                                  | Moves into the main backup lab folder.                        |
+| `tar -xzvf backups/compressed-source-backup.tar.gz -C restore-test`                | Extracts the compressed archive into the restore test folder. |
+| `find ~/backup-lab/restore-test -type f -o -type d`                                | Lists restored files and folders.                             |
+| `ls -lR ~/backup-lab/restore-test`                                                 | Lists restored files recursively with permissions.            |
+| `diff -r ~/backup-lab/source ~/backup-lab/restore-test/source`                     | Compares the original source folder with the restored folder. |
+| `echo "diff exit code: $?"`                                                        | Shows the result code from the comparison command.            |
+| `> ~/backup-lab/results/restore-diff-result.txt`                                   | Saves the restore comparison output to a results file.        |
+| `cat ~/backup-lab/results/restore-diff-result.txt`                                 | Displays the saved restore comparison result.                 |
+| `find ~/backup-lab/restore-test -type f -o -type d > .../restore-file-listing.txt` | Saves the restored file listing to a results file.            |
+| `cat ~/backup-lab/results/restore-file-listing.txt`                                | Displays the saved restored file listing.                     |
+| `ls -lh ~/backup-lab/results`                                                      | Lists saved result files.                                     |
+
+### Notes
+
+The restore test confirmed that the compressed backup archive could be extracted successfully.
+
+The restored files were compared against the original source files using `diff -r`.
+
+The comparison returned `diff exit code: 0`, which means no differences were found between the original source folder and the restored source folder.
+
+This confirms that the backup archive was usable for recovery, not just archive creation.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-07a-rhel-restore-test-extraction.png](screenshots/screenshot-07a-rhel-restore-test-extraction.png)
+
+![screenshot-07b-rhel-restore-test-verification.png](screenshots/screenshot-07b-rhel-restore-test-verification.png)
