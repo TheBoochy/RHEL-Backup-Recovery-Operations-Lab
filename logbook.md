@@ -524,86 +524,6 @@ Screenshots:
 
 ![screenshot-05b-rhel-compressed-backup-contents.png](screenshots/screenshot-05b-rhel-compressed-backup-contents.png)
 
-## 2026-06-29 — Part 6: Backup verification and checksums
-
-### Goal
-
-Generate SHA-256 checksums for the backup archives and verify that the archives match their recorded checksum values.
-
-### Work completed
-
-* Reviewed the backup archive folder.
-* Verified the manual tar archive file type.
-* Verified the compressed tar.gz archive file type.
-* Generated SHA-256 checksums for both backup archives.
-* Saved the checksum hashes to a results file.
-* Verified both backup archives with `sha256sum -c`.
-* Saved the checksum verification output to a results file.
-* Reviewed the results folder.
-* Saved screenshot evidence.
-
-### Verification results
-
-| Item                            | Result                                                             |
-| ------------------------------- | ------------------------------------------------------------------ |
-| Manual backup archive           | `/home/vulkan/backup-lab/backups/manual-source-backup.tar`         |
-| Compressed backup archive       | `/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz`  |
-| Checksum file                   | `/home/vulkan/backup-lab/results/backup-checksums.sha256`          |
-| Checksum verification file      | `/home/vulkan/backup-lab/results/backup-checksum-verification.txt` |
-| Manual archive verification     | `OK`                                                               |
-| Compressed archive verification | `OK`                                                               |
-
-### Commands used
-
-```bash
-ls -lh ~/backup-lab/backups
-file ~/backup-lab/backups/manual-source-backup.tar
-file ~/backup-lab/backups/compressed-source-backup.tar.gz
-
-cd ~/backup-lab/backups
-sha256sum manual-source-backup.tar compressed-source-backup.tar.gz > ../results/backup-checksums.sha256
-cat ../results/backup-checksums.sha256
-
-sha256sum -c ../results/backup-checksums.sha256
-
-sha256sum -c ../results/backup-checksums.sha256 > ../results/backup-checksum-verification.txt
-cat ../results/backup-checksum-verification.txt
-
-ls -lh ~/backup-lab/results
-```
-
-### Command purpose
-
-| Command                                                              | Purpose                                                   |
-| -------------------------------------------------------------------- | --------------------------------------------------------- |
-| `ls -lh ~/backup-lab/backups`                                        | Lists backup archives and shows readable file sizes.      |
-| `file ~/backup-lab/backups/manual-source-backup.tar`                 | Checks the file type of the manual tar archive.           |
-| `file ~/backup-lab/backups/compressed-source-backup.tar.gz`          | Checks the file type of the compressed archive.           |
-| `cd ~/backup-lab/backups`                                            | Moves into the backup archive folder.                     |
-| `sha256sum manual-source-backup.tar compressed-source-backup.tar.gz` | Generates SHA-256 checksums for both backup archives.     |
-| `> ../results/backup-checksums.sha256`                               | Saves the checksum output to a results file.              |
-| `cat ../results/backup-checksums.sha256`                             | Displays the saved checksum file.                         |
-| `sha256sum -c ../results/backup-checksums.sha256`                    | Verifies the backup archives against the checksum file.   |
-| `> ../results/backup-checksum-verification.txt`                      | Saves the checksum verification output to a results file. |
-| `cat ../results/backup-checksum-verification.txt`                    | Displays the saved checksum verification result.          |
-| `ls -lh ~/backup-lab/results`                                        | Lists saved result files.                                 |
-
-### Notes
-
-The checksum file records SHA-256 hashes for both backup archives.
-
-The verification command returned `OK` for both backup archives, confirming that the files matched their recorded checksum values.
-
-This step helps prove backup integrity and provides a way to detect future corruption or unexpected file changes.
-
-### Evidence
-
-Screenshots:
-
-![screenshot-06a-rhel-backup-checksum-created-and-verified.png](screenshots/screenshot-06a-rhel-backup-checksum-created-and-verified.png)
-
----
-
 ---
 
 ## 2026-06-29 — Part 6: Backup verification and checksums
@@ -757,7 +677,7 @@ ls -lh ~/backup-lab/results
 | `cd ~/backup-lab/backups`                                                          | Moves into the backup archive folder.                         |
 | `sha256sum -c ../results/backup-checksums.sha256`                                  | Verifies backup archives before restore testing.              |
 | `cd ~/backup-lab`                                                                  | Moves into the main backup lab folder.                        |
-| `tar -xzvf backups/compressed-source-backup.tar.gz -C restore-test`                | Extracts the compressed archive into the restore test folder. |
+| `tar -xzvf backups/compressed-source-backup.tar.gz -C restore-test`                 | Extracts the compressed archive into the restore test folder. |
 | `find ~/backup-lab/restore-test -type f -o -type d`                                | Lists restored files and folders.                             |
 | `ls -lR ~/backup-lab/restore-test`                                                 | Lists restored files recursively with permissions.            |
 | `diff -r ~/backup-lab/source ~/backup-lab/restore-test/source`                     | Compares the original source folder with the restored folder. |
@@ -785,3 +705,55 @@ Screenshots:
 ![screenshot-07a-rhel-restore-test-extraction.png](screenshots/screenshot-07a-rhel-restore-test-extraction.png)
 
 ![screenshot-07b-rhel-restore-test-verification.png](screenshots/screenshot-07b-rhel-restore-test-verification.png)
+
+---
+
+## 2026-06-29 — Final project wrap-up
+
+### Goal
+
+Close the RHEL Backup and Recovery Operations Lab as a completed basic backup and restore workflow.
+
+### Work completed
+
+* Reviewed the completed lab parts.
+* Confirmed that the project covers the full basic backup lifecycle.
+* Confirmed that backup archives were created.
+* Confirmed that checksum verification was completed.
+* Confirmed that restore testing was completed successfully.
+* Confirmed that restored files matched the original source files.
+* Decided to stop the project after restore verification.
+* Documented possible future improvements instead of continuing into more advanced scripting and scheduling tasks.
+
+### Completed workflow
+
+| Area | Result |
+| --- | --- |
+| Repository setup | Complete |
+| RHEL baseline review | Complete |
+| Test data creation | Complete |
+| Manual backup archive | Complete |
+| Compressed backup archive | Complete |
+| Checksum verification | Complete |
+| Restore test | Complete |
+| GitHub documentation | Complete |
+| Backup scripting | Future improvement |
+| Scheduled backup automation | Future improvement |
+
+### Notes
+
+The project is completed as a basic RHEL backup and recovery operations lab.
+
+The lab successfully demonstrates the core backup workflow:
+
+1. Prepare safe test data.
+2. Create backup archives.
+3. Verify backup contents.
+4. Generate and verify checksums.
+5. Restore from backup.
+6. Compare restored files against the original source files.
+7. Document the process with screenshots and Git commits.
+
+The project stops here because the main learning goal has been reached. More advanced automation tasks, such as backup scripts and scheduled jobs, can be added later as future improvements.
+
+This keeps the project realistic, focused and suitable for a portfolio.

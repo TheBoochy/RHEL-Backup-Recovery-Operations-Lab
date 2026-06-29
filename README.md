@@ -52,11 +52,11 @@ The goals of this lab are to:
 | Part 5  | Compressed backup archive                  | Complete |
 | Part 6  | Backup verification and checksums          | Complete |
 | Part 7  | Restore test from backup                   | Complete |
-| Part 8  | Backup script creation                     | Planned  |
-| Part 9  | Scheduled backup review                    | Planned  |
-| Part 10 | Backup logs and result documentation       | Planned  |
-| Part 11 | Recovery reflection document               | Planned  |
-| Part 12 | Final README and GitHub polish             | Planned  |
+| Part 8  | Backup script creation                     | Future improvement |
+| Part 9  | Scheduled backup review                    | Future improvement |
+| Part 10 | Backup logs and result documentation       | Future improvement |
+| Part 11 | Recovery reflection document               | Future improvement |
+| Part 12 | Final README and GitHub polish             | Complete |
 
 ---
 
@@ -118,13 +118,13 @@ SHA-256 checksums were generated for both backup archives and saved to `/home/vu
 
 A restore test was performed from `/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz` into `/home/vulkan/backup-lab/restore-test`. The restored files were compared against the original source folder with `diff -r`, and the comparison returned exit code `0`, confirming that the restored files matched the original test data.
 
-The next step is to create a reusable backup script.
+This lab is completed as a basic RHEL backup and restore workflow. Future improvements could include a reusable backup script, scheduled backup automation, backup logging, retention rules and more advanced recovery documentation.
 
 ---
 
 ## Skills demonstrated
 
-This project will demonstrate:
+This project demonstrates:
 
 * Red Hat Enterprise Linux administration
 * Backup planning
@@ -627,6 +627,42 @@ Screenshot links:
 [screenshot-07a-rhel-restore-test-extraction.png](screenshots/screenshot-07a-rhel-restore-test-extraction.png)
 
 [screenshot-07b-rhel-restore-test-verification.png](screenshots/screenshot-07b-rhel-restore-test-verification.png)
+
+---
+
+## Final project status
+
+Status: Complete
+
+This project was completed as a basic RHEL backup and recovery operations lab.
+
+The completed workflow includes:
+
+* RHEL baseline review.
+* Backup tool review.
+* Safe test data creation.
+* Manual tar backup creation.
+* Compressed tar.gz backup creation.
+* Backup content verification.
+* SHA-256 checksum generation.
+* Checksum-based backup integrity verification.
+* Restore testing from backup.
+* Comparison of restored files against original source files.
+* Screenshot-based documentation.
+* Git and GitHub version tracking.
+
+The lab intentionally stops after restore verification because the main learning goal was to understand the basic backup and recovery workflow.
+
+Possible future improvements include:
+
+* Creating a reusable backup script.
+* Adding scheduled backup automation with cron or systemd timers.
+* Adding backup log files.
+* Adding backup retention rules.
+* Testing failure scenarios.
+* Testing restore from multiple backup versions.
+
+This keeps the project focused, readable and realistic for a portfolio.
 
 ---
 
