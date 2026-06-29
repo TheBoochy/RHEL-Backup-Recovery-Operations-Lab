@@ -48,7 +48,7 @@ The goals of this lab are to:
 | Part 1  | Repository setup and planning              | Complete |
 | Part 2  | RHEL baseline and backup target review     | Complete |
 | Part 3  | Create test data and backup source folders | Complete |
-| Part 4  | Manual tar backup                          | Planned  |
+| Part 4  | Manual tar backup                          | Complete |
 | Part 5  | Compressed backup archive                  | Planned  |
 | Part 6  | Backup verification and checksums          | Planned  |
 | Part 7  | Restore test from backup                   | Planned  |
@@ -78,7 +78,9 @@ RHEL-Backup-Recovery-Operations-Lab/
 │   ├── screenshot-02c-rhel-backup-tool-availability.png
 │   ├── screenshot-02d-rhel-backup-target-review.png
 │   ├── screenshot-03a-rhel-backup-lab-folder-structure.png
-│   └── screenshot-03b-rhel-backup-test-file-content.png
+│   ├── screenshot-03b-rhel-backup-test-file-content.png
+│   ├── screenshot-04a-rhel-manual-tar-backup-created.png
+│   └── screenshot-04b-rhel-manual-tar-backup-contents.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -103,7 +105,9 @@ Backup target locations were reviewed. No existing `/home/vulkan/backup-lab` fol
 
 Safe backup test data was created under `/home/vulkan/backup-lab/source`. The test data includes lab configuration files, lab documents and a backup scope report. Supporting folders were also created for backups, restore testing and result output.
 
-The next step is to create a manual tar backup from the test source folder.
+A manual tar backup archive was created from `/home/vulkan/backup-lab/source` and saved as `/home/vulkan/backup-lab/backups/manual-source-backup.tar`. The archive was verified with `ls`, `file` and `tar -tf`. The archive contents were also saved to a results file.
+
+The next step is to create a compressed backup archive.
 
 ---
 
@@ -147,15 +151,17 @@ screenshots/
 
 Current screenshot evidence:
 
-| Screenshot                                                | Purpose                                    |
-| --------------------------------------------------------- | ------------------------------------------ |
-| `screenshot-01-project-structure-and-git-status.png`      | Initial project structure and Git status   |
-| `screenshot-02a-rhel-baseline-system.png`                 | RHEL baseline system information           |
-| `screenshot-02b-rhel-baseline-resources-and-security.png` | Disk, memory, SELinux and firewalld review |
-| `screenshot-02c-rhel-backup-tool-availability.png`        | Backup tool and scheduling availability    |
-| `screenshot-02d-rhel-backup-target-review.png`            | Backup target and temporary folder review  |
-| `screenshot-03a-rhel-backup-lab-folder-structure.png`     | Backup lab folder structure verification   |
-| `screenshot-03b-rhel-backup-test-file-content.png`        | Backup test file content verification      |
+| Screenshot                                                | Purpose                                      |
+| --------------------------------------------------------- | -------------------------------------------- |
+| `screenshot-01-project-structure-and-git-status.png`      | Initial project structure and Git status     |
+| `screenshot-02a-rhel-baseline-system.png`                 | RHEL baseline system information             |
+| `screenshot-02b-rhel-baseline-resources-and-security.png` | Disk, memory, SELinux and firewalld review   |
+| `screenshot-02c-rhel-backup-tool-availability.png`        | Backup tool and scheduling availability      |
+| `screenshot-02d-rhel-backup-target-review.png`            | Backup target and temporary folder review    |
+| `screenshot-03a-rhel-backup-lab-folder-structure.png`     | Backup lab folder structure verification     |
+| `screenshot-03b-rhel-backup-test-file-content.png`        | Backup test file content verification        |
+| `screenshot-04a-rhel-manual-tar-backup-created.png`       | Manual tar archive creation and verification |
+| `screenshot-04b-rhel-manual-tar-backup-contents.png`      | Manual tar archive content verification      |
 
 Command results and verification output may be stored in:
 
@@ -341,6 +347,66 @@ Screenshots:
 ```text
 screenshots/screenshot-03a-rhel-backup-lab-folder-structure.png
 screenshots/screenshot-03b-rhel-backup-test-file-content.png
+```
+
+---
+
+## Part 4 — Manual tar backup
+
+Status: Complete
+
+This part created a manual tar backup archive from the backup lab source folder.
+
+The source folder was:
+
+```text
+/home/vulkan/backup-lab/source
+```
+
+The backup archive was saved as:
+
+```text
+/home/vulkan/backup-lab/backups/manual-source-backup.tar
+```
+
+Commands used:
+
+```bash
+ls -lR ~/backup-lab/source
+
+cd ~/backup-lab
+tar -cvf backups/manual-source-backup.tar source
+
+ls -lh ~/backup-lab/backups
+file ~/backup-lab/backups/manual-source-backup.tar
+
+tar -tf ~/backup-lab/backups/manual-source-backup.tar
+
+tar -tf ~/backup-lab/backups/manual-source-backup.tar > ~/backup-lab/results/manual-source-backup-contents.txt
+cat ~/backup-lab/results/manual-source-backup-contents.txt
+```
+
+Results:
+
+* Verified that the backup source folder existed.
+* Created a manual tar archive named `manual-source-backup.tar`.
+* Stored the archive in `/home/vulkan/backup-lab/backups`.
+* Verified that the archive file existed.
+* Verified the archive file type.
+* Listed the archive contents without extracting it.
+* Saved the archive content listing to `/home/vulkan/backup-lab/results/manual-source-backup-contents.txt`.
+
+Notes:
+
+This backup archive is not compressed. It is a basic tar archive used to demonstrate manual archive creation and content verification.
+
+The archive contains the safe lab test data created in Part 3.
+
+Screenshots:
+
+```text
+screenshots/screenshot-04a-rhel-manual-tar-backup-created.png
+screenshots/screenshot-04b-rhel-manual-tar-backup-contents.png
 ```
 
 ---
