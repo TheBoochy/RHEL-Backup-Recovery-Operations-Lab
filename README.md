@@ -49,7 +49,7 @@ The goals of this lab are to:
 | Part 2  | RHEL baseline and backup target review     | Complete |
 | Part 3  | Create test data and backup source folders | Complete |
 | Part 4  | Manual tar backup                          | Complete |
-| Part 5  | Compressed backup archive                  | Planned  |
+| Part 5  | Compressed backup archive                  | Complete |
 | Part 6  | Backup verification and checksums          | Planned  |
 | Part 7  | Restore test from backup                   | Planned  |
 | Part 8  | Backup script creation                     | Planned  |
@@ -80,7 +80,9 @@ RHEL-Backup-Recovery-Operations-Lab/
 │   ├── screenshot-03a-rhel-backup-lab-folder-structure.png
 │   ├── screenshot-03b-rhel-backup-test-file-content.png
 │   ├── screenshot-04a-rhel-manual-tar-backup-created.png
-│   └── screenshot-04b-rhel-manual-tar-backup-contents.png
+│   ├── screenshot-04b-rhel-manual-tar-backup-contents.png
+│   ├── screenshot-05a-rhel-compressed-backup-created.png
+│   └── screenshot-05b-rhel-compressed-backup-contents.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -107,7 +109,9 @@ Safe backup test data was created under `/home/vulkan/backup-lab/source`. The te
 
 A manual tar backup archive was created from `/home/vulkan/backup-lab/source` and saved as `/home/vulkan/backup-lab/backups/manual-source-backup.tar`. The archive was verified with `ls`, `file` and `tar -tf`. The archive contents were also saved to a results file.
 
-The next step is to create a compressed backup archive.
+A compressed backup archive was created from `/home/vulkan/backup-lab/source` and saved as `/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz`. The compressed archive was verified with `ls`, `file` and `tar -tzf`. The compressed archive contents were also saved to a results file.
+
+The next step is to verify backup integrity with checksums.
 
 ---
 
@@ -151,17 +155,19 @@ screenshots/
 
 Current screenshot evidence:
 
-| Screenshot                                                | Purpose                                      |
-| --------------------------------------------------------- | -------------------------------------------- |
-| `screenshot-01-project-structure-and-git-status.png`      | Initial project structure and Git status     |
-| `screenshot-02a-rhel-baseline-system.png`                 | RHEL baseline system information             |
-| `screenshot-02b-rhel-baseline-resources-and-security.png` | Disk, memory, SELinux and firewalld review   |
-| `screenshot-02c-rhel-backup-tool-availability.png`        | Backup tool and scheduling availability      |
-| `screenshot-02d-rhel-backup-target-review.png`            | Backup target and temporary folder review    |
-| `screenshot-03a-rhel-backup-lab-folder-structure.png`     | Backup lab folder structure verification     |
-| `screenshot-03b-rhel-backup-test-file-content.png`        | Backup test file content verification        |
-| `screenshot-04a-rhel-manual-tar-backup-created.png`       | Manual tar archive creation and verification |
-| `screenshot-04b-rhel-manual-tar-backup-contents.png`      | Manual tar archive content verification      |
+| Screenshot                                                | Purpose                                             |
+| --------------------------------------------------------- | --------------------------------------------------- |
+| `screenshot-01-project-structure-and-git-status.png`      | Initial project structure and Git status            |
+| `screenshot-02a-rhel-baseline-system.png`                 | RHEL baseline system information                    |
+| `screenshot-02b-rhel-baseline-resources-and-security.png` | Disk, memory, SELinux and firewalld review          |
+| `screenshot-02c-rhel-backup-tool-availability.png`        | Backup tool and scheduling availability             |
+| `screenshot-02d-rhel-backup-target-review.png`            | Backup target and temporary folder review           |
+| `screenshot-03a-rhel-backup-lab-folder-structure.png`     | Backup lab folder structure verification            |
+| `screenshot-03b-rhel-backup-test-file-content.png`        | Backup test file content verification               |
+| `screenshot-04a-rhel-manual-tar-backup-created.png`       | Manual tar archive creation and verification        |
+| `screenshot-04b-rhel-manual-tar-backup-contents.png`      | Manual tar archive content verification             |
+| `screenshot-05a-rhel-compressed-backup-created.png`       | Compressed tar.gz archive creation and verification |
+| `screenshot-05b-rhel-compressed-backup-contents.png`      | Compressed archive content verification             |
 
 Command results and verification output may be stored in:
 
@@ -240,12 +246,13 @@ The `backup-lab` folder did not already exist, which provided a clean starting p
 
 Screenshots:
 
-```text
-screenshots/screenshot-02a-rhel-baseline-system.png
-screenshots/screenshot-02b-rhel-baseline-resources-and-security.png
-screenshots/screenshot-02c-rhel-backup-tool-availability.png
-screenshots/screenshot-02d-rhel-backup-target-review.png
-```
+![screenshot-02a-rhel-baseline-system.png](screenshots/screenshot-02a-rhel-baseline-system.png)
+
+![screenshot-02b-rhel-baseline-resources-and-security.png](screenshots/screenshot-02b-rhel-baseline-resources-and-security.png)
+
+![screenshot-02c-rhel-backup-tool-availability.png](screenshots/screenshot-02c-rhel-backup-tool-availability.png)
+
+![screenshot-02d-rhel-backup-target-review.png](screenshots/screenshot-02d-rhel-backup-target-review.png)
 
 ---
 
@@ -344,10 +351,9 @@ All files created in this part are safe test data for the lab.
 
 Screenshots:
 
-```text
-screenshots/screenshot-03a-rhel-backup-lab-folder-structure.png
-screenshots/screenshot-03b-rhel-backup-test-file-content.png
-```
+![screenshot-03a-rhel-backup-lab-folder-structure.png](screenshots/screenshot-03a-rhel-backup-lab-folder-structure.png)
+
+![screenshot-03b-rhel-backup-test-file-content.png](screenshots/screenshot-03b-rhel-backup-test-file-content.png)
 
 ---
 
@@ -404,10 +410,70 @@ The archive contains the safe lab test data created in Part 3.
 
 Screenshots:
 
+![screenshot-04a-rhel-manual-tar-backup-created.png](screenshots/screenshot-04a-rhel-manual-tar-backup-created.png)
+
+![screenshot-04b-rhel-manual-tar-backup-contents.png](screenshots/screenshot-04b-rhel-manual-tar-backup-contents.png)
+
+---
+
+## Part 5 — Compressed backup archive
+
+Status: Complete
+
+This part created a compressed `tar.gz` backup archive from the backup lab source folder.
+
+The source folder was:
+
 ```text
-screenshots/screenshot-04a-rhel-manual-tar-backup-created.png
-screenshots/screenshot-04b-rhel-manual-tar-backup-contents.png
+/home/vulkan/backup-lab/source
 ```
+
+The compressed backup archive was saved as:
+
+```text
+/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz
+```
+
+Commands used:
+
+```bash
+ls -lR ~/backup-lab/source
+ls -lh ~/backup-lab/backups
+
+cd ~/backup-lab
+tar -czvf backups/compressed-source-backup.tar.gz source
+
+ls -lh ~/backup-lab/backups
+file ~/backup-lab/backups/compressed-source-backup.tar.gz
+
+tar -tzf ~/backup-lab/backups/compressed-source-backup.tar.gz
+
+tar -tzf ~/backup-lab/backups/compressed-source-backup.tar.gz > ~/backup-lab/results/compressed-source-backup-contents.txt
+cat ~/backup-lab/results/compressed-source-backup-contents.txt
+```
+
+Results:
+
+* Verified that the backup source folder existed.
+* Reviewed existing backup archives.
+* Created a compressed archive named `compressed-source-backup.tar.gz`.
+* Stored the archive in `/home/vulkan/backup-lab/backups`.
+* Verified that the compressed archive file existed.
+* Verified the archive file type.
+* Listed the compressed archive contents without extracting it.
+* Saved the compressed archive content listing to `/home/vulkan/backup-lab/results/compressed-source-backup-contents.txt`.
+
+Notes:
+
+This backup archive uses gzip compression through the `tar -z` option.
+
+The compressed archive contains the same safe lab test data as the manual tar archive from Part 4, but stores it in a compressed `tar.gz` format.
+
+Screenshots:
+
+![screenshot-05a-rhel-compressed-backup-created.png](screenshots/screenshot-05a-rhel-compressed-backup-created.png)
+
+![screenshot-05b-rhel-compressed-backup-contents.png](screenshots/screenshot-05b-rhel-compressed-backup-contents.png)
 
 ---
 
