@@ -363,3 +363,241 @@ Screenshots:
 ![screenshot-03a-rhel-backup-lab-folder-structure.png](screenshots/screenshot-03a-rhel-backup-lab-folder-structure.png)
 
 ![screenshot-03b-rhel-backup-test-file-content.png](screenshots/screenshot-03b-rhel-backup-test-file-content.png)
+
+---
+
+## 2026-06-25 — Part 4: Manual tar backup
+
+### Goal
+
+Create a manual tar backup archive from the safe backup test data and verify that the archive exists and contains the expected files.
+
+### Work completed
+
+* Reviewed the backup source folder.
+* Created a manual tar archive from `/home/vulkan/backup-lab/source`.
+* Saved the archive in `/home/vulkan/backup-lab/backups`.
+* Verified that the archive file was created.
+* Verified the archive file type.
+* Listed the archive contents without extracting it.
+* Saved the archive content listing to a results file.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item                  | Result                                                              |
+| --------------------- | ------------------------------------------------------------------- |
+| Backup source folder  | `/home/vulkan/backup-lab/source`                                    |
+| Backup archive folder | `/home/vulkan/backup-lab/backups`                                   |
+| Archive file          | `/home/vulkan/backup-lab/backups/manual-source-backup.tar`          |
+| Archive type          | tar archive                                                         |
+| Archive contents      | Verified with `tar -tf`                                             |
+| Results file          | `/home/vulkan/backup-lab/results/manual-source-backup-contents.txt` |
+
+### Commands used
+
+```bash
+ls -lR ~/backup-lab/source
+
+cd ~/backup-lab
+tar -cvf backups/manual-source-backup.tar source
+
+ls -lh ~/backup-lab/backups
+file ~/backup-lab/backups/manual-source-backup.tar
+
+tar -tf ~/backup-lab/backups/manual-source-backup.tar
+
+tar -tf ~/backup-lab/backups/manual-source-backup.tar > ~/backup-lab/results/manual-source-backup-contents.txt
+cat ~/backup-lab/results/manual-source-backup-contents.txt
+```
+
+### Command purpose
+
+| Command                                                      | Purpose                                                   |
+| ------------------------------------------------------------ | --------------------------------------------------------- |
+| `ls -lR ~/backup-lab/source`                                 | Lists the backup source files recursively before backup.  |
+| `cd ~/backup-lab`                                            | Moves into the main backup lab folder.                    |
+| `tar -cvf backups/manual-source-backup.tar source`           | Creates a manual tar archive from the `source` folder.    |
+| `ls -lh ~/backup-lab/backups`                                | Verifies that the archive exists and shows its file size. |
+| `file ~/backup-lab/backups/manual-source-backup.tar`         | Checks the archive file type.                             |
+| `tar -tf ~/backup-lab/backups/manual-source-backup.tar`      | Lists the archive contents without extracting it.         |
+| `> ~/backup-lab/results/manual-source-backup-contents.txt`   | Saves the archive content listing to a results file.      |
+| `cat ~/backup-lab/results/manual-source-backup-contents.txt` | Displays the saved archive content listing.               |
+
+### Notes
+
+This part created an uncompressed tar archive. This is useful for learning basic archive creation before moving on to compressed backups.
+
+The archive contains only safe lab test data from the backup source folder.
+
+The archive was verified without extraction by listing its contents with `tar -tf`.
+
+The archive content listing was saved in the `results` folder so the backup contents can be reviewed later without rerunning the command.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-04a-rhel-manual-tar-backup-created.png](screenshots/screenshot-04a-rhel-manual-tar-backup-created.png)
+
+![screenshot-04b-rhel-manual-tar-backup-contents.png](screenshots/screenshot-04b-rhel-manual-tar-backup-contents.png)
+
+---
+
+## 2026-06-25 — Part 5: Compressed backup archive
+
+### Goal
+
+Create a compressed backup archive from the safe backup test data and verify that the archive exists, has the correct file type and contains the expected files.
+
+### Work completed
+
+* Reviewed the backup source folder.
+* Reviewed the existing backup archive folder.
+* Created a compressed `tar.gz` archive from `/home/vulkan/backup-lab/source`.
+* Saved the compressed archive in `/home/vulkan/backup-lab/backups`.
+* Verified that the compressed archive file was created.
+* Verified the compressed archive file type.
+* Listed the compressed archive contents without extracting it.
+* Saved the compressed archive content listing to a results file.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item                       | Result                                                                  |
+| -------------------------- | ----------------------------------------------------------------------- |
+| Backup source folder       | `/home/vulkan/backup-lab/source`                                        |
+| Backup archive folder      | `/home/vulkan/backup-lab/backups`                                       |
+| Compressed archive file    | `/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz`       |
+| Archive type               | gzip-compressed tar archive                                             |
+| Archive contents           | Verified with `tar -tzf`                                                |
+| Results file               | `/home/vulkan/backup-lab/results/compressed-source-backup-contents.txt` |
+| Previous uncompressed file | `/home/vulkan/backup-lab/backups/manual-source-backup.tar`              |
+
+### Commands used
+
+```bash
+ls -lR ~/backup-lab/source
+ls -lh ~/backup-lab/backups
+
+cd ~/backup-lab
+tar -czvf backups/compressed-source-backup.tar.gz source
+
+ls -lh ~/backup-lab/backups
+file ~/backup-lab/backups/compressed-source-backup.tar.gz
+
+tar -tzf ~/backup-lab/backups/compressed-source-backup.tar.gz
+
+tar -tzf ~/backup-lab/backups/compressed-source-backup.tar.gz > ~/backup-lab/results/compressed-source-backup-contents.txt
+cat ~/backup-lab/results/compressed-source-backup-contents.txt
+```
+
+### Command purpose
+
+| Command                                                          | Purpose                                                                |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `ls -lR ~/backup-lab/source`                                     | Lists the backup source files recursively before creating the archive. |
+| `ls -lh ~/backup-lab/backups`                                    | Reviews existing backup archives and their readable file sizes.        |
+| `cd ~/backup-lab`                                                | Moves into the main backup lab folder.                                 |
+| `tar -czvf backups/compressed-source-backup.tar.gz source`       | Creates a gzip-compressed tar archive from the `source` folder.        |
+| `ls -lh ~/backup-lab/backups`                                    | Verifies that the compressed archive exists and shows its file size.   |
+| `file ~/backup-lab/backups/compressed-source-backup.tar.gz`      | Checks the compressed archive file type.                               |
+| `tar -tzf ~/backup-lab/backups/compressed-source-backup.tar.gz`  | Lists the compressed archive contents without extracting it.           |
+| `> ~/backup-lab/results/compressed-source-backup-contents.txt`   | Saves the compressed archive content listing to a results file.        |
+| `cat ~/backup-lab/results/compressed-source-backup-contents.txt` | Displays the saved compressed archive content listing.                 |
+
+### Notes
+
+This part created a compressed backup archive using the `tar -z` option for gzip compression.
+
+The compressed archive contains only safe lab test data from the backup source folder.
+
+The archive was verified without extraction by listing its contents with `tar -tzf`.
+
+The archive content listing was saved in the `results` folder so the compressed backup contents can be reviewed later without rerunning the command.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-05a-rhel-compressed-backup-created.png](screenshots/screenshot-05a-rhel-compressed-backup-created.png)
+
+![screenshot-05b-rhel-compressed-backup-contents.png](screenshots/screenshot-05b-rhel-compressed-backup-contents.png)
+
+## 2026-06-29 — Part 6: Backup verification and checksums
+
+### Goal
+
+Generate SHA-256 checksums for the backup archives and verify that the archives match their recorded checksum values.
+
+### Work completed
+
+* Reviewed the backup archive folder.
+* Verified the manual tar archive file type.
+* Verified the compressed tar.gz archive file type.
+* Generated SHA-256 checksums for both backup archives.
+* Saved the checksum hashes to a results file.
+* Verified both backup archives with `sha256sum -c`.
+* Saved the checksum verification output to a results file.
+* Reviewed the results folder.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item                            | Result                                                             |
+| ------------------------------- | ------------------------------------------------------------------ |
+| Manual backup archive           | `/home/vulkan/backup-lab/backups/manual-source-backup.tar`         |
+| Compressed backup archive       | `/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz`  |
+| Checksum file                   | `/home/vulkan/backup-lab/results/backup-checksums.sha256`          |
+| Checksum verification file      | `/home/vulkan/backup-lab/results/backup-checksum-verification.txt` |
+| Manual archive verification     | `OK`                                                               |
+| Compressed archive verification | `OK`                                                               |
+
+### Commands used
+
+```bash
+ls -lh ~/backup-lab/backups
+file ~/backup-lab/backups/manual-source-backup.tar
+file ~/backup-lab/backups/compressed-source-backup.tar.gz
+
+cd ~/backup-lab/backups
+sha256sum manual-source-backup.tar compressed-source-backup.tar.gz > ../results/backup-checksums.sha256
+cat ../results/backup-checksums.sha256
+
+sha256sum -c ../results/backup-checksums.sha256
+
+sha256sum -c ../results/backup-checksums.sha256 > ../results/backup-checksum-verification.txt
+cat ../results/backup-checksum-verification.txt
+
+ls -lh ~/backup-lab/results
+```
+
+### Command purpose
+
+| Command                                                              | Purpose                                                   |
+| -------------------------------------------------------------------- | --------------------------------------------------------- |
+| `ls -lh ~/backup-lab/backups`                                        | Lists backup archives and shows readable file sizes.      |
+| `file ~/backup-lab/backups/manual-source-backup.tar`                 | Checks the file type of the manual tar archive.           |
+| `file ~/backup-lab/backups/compressed-source-backup.tar.gz`          | Checks the file type of the compressed archive.           |
+| `cd ~/backup-lab/backups`                                            | Moves into the backup archive folder.                     |
+| `sha256sum manual-source-backup.tar compressed-source-backup.tar.gz` | Generates SHA-256 checksums for both backup archives.     |
+| `> ../results/backup-checksums.sha256`                               | Saves the checksum output to a results file.              |
+| `cat ../results/backup-checksums.sha256`                             | Displays the saved checksum file.                         |
+| `sha256sum -c ../results/backup-checksums.sha256`                    | Verifies the backup archives against the checksum file.   |
+| `> ../results/backup-checksum-verification.txt`                      | Saves the checksum verification output to a results file. |
+| `cat ../results/backup-checksum-verification.txt`                    | Displays the saved checksum verification result.          |
+| `ls -lh ~/backup-lab/results`                                        | Lists saved result files.                                 |
+
+### Notes
+
+The checksum file records SHA-256 hashes for both backup archives.
+
+The verification command returned `OK` for both backup archives, confirming that the files matched their recorded checksum values.
+
+This step helps prove backup integrity and provides a way to detect future corruption or unexpected file changes.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-06a-rhel-backup-checksum-created-and-verified.png](screenshots/screenshot-06a-rhel-backup-checksum-created-and-verified.png)

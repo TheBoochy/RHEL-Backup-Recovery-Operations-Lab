@@ -50,7 +50,7 @@ The goals of this lab are to:
 | Part 3  | Create test data and backup source folders | Complete |
 | Part 4  | Manual tar backup                          | Complete |
 | Part 5  | Compressed backup archive                  | Complete |
-| Part 6  | Backup verification and checksums          | Planned  |
+| Part 6  | Backup verification and checksums          | Complete |
 | Part 7  | Restore test from backup                   | Planned  |
 | Part 8  | Backup script creation                     | Planned  |
 | Part 9  | Scheduled backup review                    | Planned  |
@@ -82,7 +82,8 @@ RHEL-Backup-Recovery-Operations-Lab/
 │   ├── screenshot-04a-rhel-manual-tar-backup-created.png
 │   ├── screenshot-04b-rhel-manual-tar-backup-contents.png
 │   ├── screenshot-05a-rhel-compressed-backup-created.png
-│   └── screenshot-05b-rhel-compressed-backup-contents.png
+│   ├── screenshot-05b-rhel-compressed-backup-contents.png
+│   └── screenshot-06a-rhel-backup-checksum-created-and-verified.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -111,7 +112,9 @@ A manual tar backup archive was created from `/home/vulkan/backup-lab/source` an
 
 A compressed backup archive was created from `/home/vulkan/backup-lab/source` and saved as `/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz`. The compressed archive was verified with `ls`, `file` and `tar -tzf`. The compressed archive contents were also saved to a results file.
 
-The next step is to verify backup integrity with checksums.
+SHA-256 checksums were generated for both backup archives and saved to `/home/vulkan/backup-lab/results/backup-checksums.sha256`. The checksums were verified with `sha256sum -c`, and both backup archives returned `OK`. The verification output was saved to `/home/vulkan/backup-lab/results/backup-checksum-verification.txt`.
+
+The next step is to perform a restore test from backup.
 
 ---
 
@@ -153,19 +156,20 @@ The README links to screenshot files instead of displaying them inline, so the p
 
 Current screenshot evidence:
 
-| Screenshot                                                | Purpose                                             |
-| --------------------------------------------------------- | --------------------------------------------------- |
-| `screenshot-01-project-structure-and-git-status.png`      | Initial project structure and Git status            |
-| `screenshot-02a-rhel-baseline-system.png`                 | RHEL baseline system information                    |
-| `screenshot-02b-rhel-baseline-resources-and-security.png` | Disk, memory, SELinux and firewalld review          |
-| `screenshot-02c-rhel-backup-tool-availability.png`        | Backup tool and scheduling availability             |
-| `screenshot-02d-rhel-backup-target-review.png`            | Backup target and temporary folder review           |
-| `screenshot-03a-rhel-backup-lab-folder-structure.png`     | Backup lab folder structure verification            |
-| `screenshot-03b-rhel-backup-test-file-content.png`        | Backup test file content verification               |
-| `screenshot-04a-rhel-manual-tar-backup-created.png`       | Manual tar archive creation and verification        |
-| `screenshot-04b-rhel-manual-tar-backup-contents.png`      | Manual tar archive content verification             |
-| `screenshot-05a-rhel-compressed-backup-created.png`       | Compressed tar.gz archive creation and verification |
-| `screenshot-05b-rhel-compressed-backup-contents.png`      | Compressed archive content verification             |
+| Screenshot                                                     | Purpose                                             |
+| -------------------------------------------------------------- | --------------------------------------------------- |
+| `screenshot-01-project-structure-and-git-status.png`           | Initial project structure and Git status            |
+| `screenshot-02a-rhel-baseline-system.png`                      | RHEL baseline system information                    |
+| `screenshot-02b-rhel-baseline-resources-and-security.png`      | Disk, memory, SELinux and firewalld review          |
+| `screenshot-02c-rhel-backup-tool-availability.png`             | Backup tool and scheduling availability             |
+| `screenshot-02d-rhel-backup-target-review.png`                 | Backup target and temporary folder review           |
+| `screenshot-03a-rhel-backup-lab-folder-structure.png`          | Backup lab folder structure verification            |
+| `screenshot-03b-rhel-backup-test-file-content.png`             | Backup test file content verification               |
+| `screenshot-04a-rhel-manual-tar-backup-created.png`            | Manual tar archive creation and verification        |
+| `screenshot-04b-rhel-manual-tar-backup-contents.png`           | Manual tar archive content verification             |
+| `screenshot-05a-rhel-compressed-backup-created.png`            | Compressed tar.gz archive creation and verification |
+| `screenshot-05b-rhel-compressed-backup-contents.png`           | Compressed archive content verification             |
+| `screenshot-06a-rhel-backup-checksum-created-and-verified.png` | Backup checksum creation and verification           |
 
 Command results and verification output may be stored in:
 
@@ -245,9 +249,13 @@ The `backup-lab` folder did not already exist, which provided a clean starting p
 Screenshot links:
 
 [screenshot-02a-rhel-baseline-system.png](screenshots/screenshot-02a-rhel-baseline-system.png)
+
 [screenshot-02b-rhel-baseline-resources-and-security.png](screenshots/screenshot-02b-rhel-baseline-resources-and-security.png)
+
 [screenshot-02c-rhel-backup-tool-availability.png](screenshots/screenshot-02c-rhel-backup-tool-availability.png)
+
 [screenshot-02d-rhel-backup-target-review.png](screenshots/screenshot-02d-rhel-backup-target-review.png)
+
 ---
 
 ## Part 3 — Create test data and backup source folders
@@ -346,7 +354,9 @@ All files created in this part are safe test data for the lab.
 Screenshot links:
 
 [screenshot-03a-rhel-backup-lab-folder-structure.png](screenshots/screenshot-03a-rhel-backup-lab-folder-structure.png)
+
 [screenshot-03b-rhel-backup-test-file-content.png](screenshots/screenshot-03b-rhel-backup-test-file-content.png)
+
 ---
 
 ## Part 4 — Manual tar backup
@@ -403,7 +413,9 @@ The archive contains the safe lab test data created in Part 3.
 Screenshot links:
 
 [screenshot-04a-rhel-manual-tar-backup-created.png](screenshots/screenshot-04a-rhel-manual-tar-backup-created.png)
+
 [screenshot-04b-rhel-manual-tar-backup-contents.png](screenshots/screenshot-04b-rhel-manual-tar-backup-contents.png)
+
 ---
 
 ## Part 5 — Compressed backup archive
@@ -462,7 +474,77 @@ The compressed archive contains the same safe lab test data as the manual tar ar
 Screenshot links:
 
 [screenshot-05a-rhel-compressed-backup-created.png](screenshots/screenshot-05a-rhel-compressed-backup-created.png)
+
 [screenshot-05b-rhel-compressed-backup-contents.png](screenshots/screenshot-05b-rhel-compressed-backup-contents.png)
+
+---
+
+## Part 6 — Backup verification and checksums
+
+Status: Complete
+
+This part generated SHA-256 checksums for the backup archives and verified that both backup files matched their recorded checksum values.
+
+The checked backup archives were:
+
+```text
+/home/vulkan/backup-lab/backups/manual-source-backup.tar
+/home/vulkan/backup-lab/backups/compressed-source-backup.tar.gz
+```
+
+The checksum file was saved as:
+
+```text
+/home/vulkan/backup-lab/results/backup-checksums.sha256
+```
+
+The checksum verification result was saved as:
+
+```text
+/home/vulkan/backup-lab/results/backup-checksum-verification.txt
+```
+
+Commands used:
+
+```bash
+ls -lh ~/backup-lab/backups
+file ~/backup-lab/backups/manual-source-backup.tar
+file ~/backup-lab/backups/compressed-source-backup.tar.gz
+
+cd ~/backup-lab/backups
+sha256sum manual-source-backup.tar compressed-source-backup.tar.gz > ../results/backup-checksums.sha256
+cat ../results/backup-checksums.sha256
+
+sha256sum -c ../results/backup-checksums.sha256
+
+sha256sum -c ../results/backup-checksums.sha256 > ../results/backup-checksum-verification.txt
+cat ../results/backup-checksum-verification.txt
+
+ls -lh ~/backup-lab/results
+```
+
+Results:
+
+* Verified that both backup archives existed.
+* Verified the file type of the manual tar archive.
+* Verified the file type of the compressed tar.gz archive.
+* Generated SHA-256 checksums for both backup archives.
+* Saved the checksum hashes to `backup-checksums.sha256`.
+* Verified both backup archives with `sha256sum -c`.
+* Both backup archives returned `OK`.
+* Saved the checksum verification output to `backup-checksum-verification.txt`.
+* Reviewed the results folder and confirmed the checksum files were present.
+
+Notes:
+
+Checksum verification is important because it allows backup files to be checked later for corruption or unexpected changes.
+
+The `OK` result confirms that both backup archive files matched their recorded SHA-256 hashes at the time of verification.
+
+Screenshot link:
+
+[screenshot-06a-rhel-backup-checksum-created-and-verified.png](screenshots/screenshot-06a-rhel-backup-checksum-created-and-verified.png)
+
 ---
 
 ## Notes
