@@ -147,11 +147,9 @@ Main documentation files:
 | `README.md`  | Main GitHub project overview       |
 | `logbook.md` | Step-by-step project documentation |
 
-Screenshot evidence is stored in:
+Screenshot evidence is stored in the `screenshots/` folder.
 
-```text
-screenshots/
-```
+The README links to screenshot files instead of displaying them inline, so the project overview stays clean while the detailed visual evidence remains available in the logbook and screenshots folder.
 
 Current screenshot evidence:
 
@@ -244,16 +242,12 @@ The missing `rsync` command was documented as a limitation. The lab can continue
 
 The `backup-lab` folder did not already exist, which provided a clean starting point for creating test backup data in Part 3.
 
-Screenshots:
+Screenshot links:
 
-![screenshot-02a-rhel-baseline-system.png](screenshots/screenshot-02a-rhel-baseline-system.png)
-
-![screenshot-02b-rhel-baseline-resources-and-security.png](screenshots/screenshot-02b-rhel-baseline-resources-and-security.png)
-
-![screenshot-02c-rhel-backup-tool-availability.png](screenshots/screenshot-02c-rhel-backup-tool-availability.png)
-
-![screenshot-02d-rhel-backup-target-review.png](screenshots/screenshot-02d-rhel-backup-target-review.png)
-
+[screenshot-02a-rhel-baseline-system.png](screenshots/screenshot-02a-rhel-baseline-system.png)
+[screenshot-02b-rhel-baseline-resources-and-security.png](screenshots/screenshot-02b-rhel-baseline-resources-and-security.png)
+[screenshot-02c-rhel-backup-tool-availability.png](screenshots/screenshot-02c-rhel-backup-tool-availability.png)
+[screenshot-02d-rhel-backup-target-review.png](screenshots/screenshot-02d-rhel-backup-target-review.png)
 ---
 
 ## Part 3 — Create test data and backup source folders
@@ -349,12 +343,10 @@ The `tree` command was not required because the fallback `find` command successf
 
 All files created in this part are safe test data for the lab.
 
-Screenshots:
+Screenshot links:
 
-![screenshot-03a-rhel-backup-lab-folder-structure.png](screenshots/screenshot-03a-rhel-backup-lab-folder-structure.png)
-
-![screenshot-03b-rhel-backup-test-file-content.png](screenshots/screenshot-03b-rhel-backup-test-file-content.png)
-
+[screenshot-03a-rhel-backup-lab-folder-structure.png](screenshots/screenshot-03a-rhel-backup-lab-folder-structure.png)
+[screenshot-03b-rhel-backup-test-file-content.png](screenshots/screenshot-03b-rhel-backup-test-file-content.png)
 ---
 
 ## Part 4 — Manual tar backup
@@ -408,12 +400,10 @@ This backup archive is not compressed. It is a basic tar archive used to demonst
 
 The archive contains the safe lab test data created in Part 3.
 
-Screenshots:
+Screenshot links:
 
-![screenshot-04a-rhel-manual-tar-backup-created.png](screenshots/screenshot-04a-rhel-manual-tar-backup-created.png)
-
-![screenshot-04b-rhel-manual-tar-backup-contents.png](screenshots/screenshot-04b-rhel-manual-tar-backup-contents.png)
-
+[screenshot-04a-rhel-manual-tar-backup-created.png](screenshots/screenshot-04a-rhel-manual-tar-backup-created.png)
+[screenshot-04b-rhel-manual-tar-backup-contents.png](screenshots/screenshot-04b-rhel-manual-tar-backup-contents.png)
 ---
 
 ## Part 5 — Compressed backup archive
@@ -469,12 +459,10 @@ This backup archive uses gzip compression through the `tar -z` option.
 
 The compressed archive contains the same safe lab test data as the manual tar archive from Part 4, but stores it in a compressed `tar.gz` format.
 
-Screenshots:
+Screenshot links:
 
-![screenshot-05a-rhel-compressed-backup-created.png](screenshots/screenshot-05a-rhel-compressed-backup-created.png)
-
-![screenshot-05b-rhel-compressed-backup-contents.png](screenshots/screenshot-05b-rhel-compressed-backup-contents.png)
-
+[screenshot-05a-rhel-compressed-backup-created.png](screenshots/screenshot-05a-rhel-compressed-backup-created.png)
+[screenshot-05b-rhel-compressed-backup-contents.png](screenshots/screenshot-05b-rhel-compressed-backup-contents.png)
 ---
 
 ## Notes
